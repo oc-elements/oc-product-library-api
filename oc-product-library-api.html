@@ -16,7 +16,7 @@ Element for consuming the Ordercloud Product Library API
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]</h2>
+    <iron-ajax id="getProductOptionSets"></iron-ajax>
   </template>
 
   <script>
@@ -36,6 +36,19 @@ Element for consuming the Ordercloud Product Library API
         this.$.createProduct.contentType = "application/json";
         this.$.createProduct.body = params;
         return this._generateRequest(this.$.createOptionsSet);
+      },
+
+      is: 'oc-product-library-api',
+      behaviors: [OC.Behaviours.ApiProvider],
+
+      /**
+       * Return list of options from the product library linked to an organisation
+       *
+       * @return {Promise}
+       */
+      getProductOptionSets: function() {
+        this.$.getProductOptionSets.url = this._url('/product/library/options/set');
+        return this._generateRequest(this.$.getProductOptionSets);
       },
 
     });
