@@ -20,6 +20,7 @@ Element for consuming the Ordercloud Product Library API
     <iron-ajax id="createOptionSet"></iron-ajax>
     <iron-ajax id="createOption"></iron-ajax>
     <iron-ajax id="getProductOptions"></iron-ajax>
+    <iron-ajax id="deleteOption"></iron-ajax>
   </template>
 
   <script>
@@ -43,7 +44,7 @@ Element for consuming the Ordercloud Product Library API
 
       /**
        *
-       * @param params (see docs.ordercloud.com POST /productlibraryoptions/createLibraryOptionSet)
+       * @param params (see docs.ordercloud.com POST /product/library/options)
        * @return {Promise}
        */
       createOption: function(params) {
@@ -55,7 +56,7 @@ Element for consuming the Ordercloud Product Library API
       },
 
       /**
-       * Return list of options from the product library linked to an organisation
+       * Return list of option sets from the product library linked to an organisation
        *
        * @return {Promise}
        */
@@ -72,6 +73,18 @@ Element for consuming the Ordercloud Product Library API
       getProductOptions: function(optionSetId) {
         this.$.getProductOptions.url = this._url('/product/library/options/set/'+optionSetId);
         return this._generateRequest(this.$.getProductOptions);
+      },
+
+      /**
+       * Return list of options from the product library linked to an organisation
+       *
+       * @param params {optionId : string} optionId
+       * @return {Promise}
+       */
+      deleteOption: function(optionId) {
+        this.$.deleteOption.url = this._url('/product/library/options/'+optionId);
+        this.$.deleteOption.method = "DELETE";
+        return this._generateRequest(this.$.deleteOption);
       },
 
 
