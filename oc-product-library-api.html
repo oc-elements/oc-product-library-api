@@ -17,6 +17,9 @@ Element for consuming the Ordercloud Product Library API
       }
     </style>
     <iron-ajax id="getProductOptionSets"></iron-ajax>
+    <iron-ajax id="createOptionSet"></iron-ajax>
+    <iron-ajax id="createOption"></iron-ajax>
+    <iron-ajax id="getProductOptions"></iron-ajax>
   </template>
 
   <script>
@@ -30,16 +33,26 @@ Element for consuming the Ordercloud Product Library API
        * @param params (see docs.ordercloud.com POST /productlibraryoptions/createLibraryOptionSet)
        * @return {Promise}
        */
-      createOptionsSet: function(params) {
-        this.$.createProduct.url = this._url('/product/library/options/set');
-        this.$.createProduct.method = "POST";
-        this.$.createProduct.contentType = "application/json";
-        this.$.createProduct.body = params;
-        return this._generateRequest(this.$.createOptionsSet);
+      createOptionSet: function(params) {
+        this.$.createOptionSet.url = this._url('/product/library/options/set');
+        this.$.createOptionSet.method = "POST";
+        this.$.createOptionSet.contentType = "application/json";
+        this.$.createOptionSet.body = params;
+        return this._generateRequest(this.$.createOptionSet);
       },
 
-      is: 'oc-product-library-api',
-      behaviors: [OC.Behaviours.ApiProvider],
+      /**
+       *
+       * @param params (see docs.ordercloud.com POST /productlibraryoptions/createLibraryOptionSet)
+       * @return {Promise}
+       */
+      createOption: function(params) {
+        this.$.createOption.url = this._url('/product/library/options');
+        this.$.createOption.method = "POST";
+        this.$.createOption.contentType = "application/json";
+        this.$.createOption.body = params;
+        return this._generateRequest(this.$.createOption);
+      },
 
       /**
        * Return list of options from the product library linked to an organisation
@@ -50,6 +63,18 @@ Element for consuming the Ordercloud Product Library API
         this.$.getProductOptionSets.url = this._url('/product/library/options/set');
         return this._generateRequest(this.$.getProductOptionSets);
       },
+
+      /**
+       * Return list of options from the product library linked to an organisation
+       *
+       * @return {Promise}
+       */
+      getProductOptions: function(optionSetId) {
+        this.$.getProductOptions.url = this._url('/product/library/options/set/'+optionSetId);
+        return this._generateRequest(this.$.getProductOptions);
+      },
+
+
 
     });
   </script>
