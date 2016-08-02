@@ -24,6 +24,7 @@ Element for consuming the Ordercloud Product Library API
     <iron-ajax id="getProductOption"></iron-ajax>
     <iron-ajax id="addUnlockOptionSet"></iron-ajax>
     <iron-ajax id="removeUnlockOptionSet"></iron-ajax>
+    <iron-ajax id="copyOptionSet"></iron-ajax>
   </template>
 
   <script>
@@ -140,6 +141,20 @@ Element for consuming the Ordercloud Product Library API
         this.$.removeUnlockOptionSet.method = "DELETE";
         this.$.removeUnlockOptionSet.contentType = "application/json";
         return this._generateRequest(this.$.removeUnlockOptionSet);
+      },
+
+      /**
+       * Add unlock option set for option
+       *
+       * @param optionId Number
+       * @param optionSetId Number
+       * @return {Promise}
+       */
+      copyOptionSet: function(optionSetId, newOptionSetName) {
+        this.$.copyOptionSet.url = this._url('/product/library/options/set/'+optionSetId+'/copy/'+newOptionSetName);
+        this.$.copyOptionSet.method = "PUT";
+        this.$.copyOptionSet.contentType = "application/json";
+        return this._generateRequest(this.$.copyOptionSet);
       },
 
 
