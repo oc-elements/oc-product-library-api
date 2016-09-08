@@ -164,7 +164,7 @@ Element for consuming the Ordercloud Product Library API
        * @param params (see docs.ordercloud.com POST /product/library/products)
        * @return {Promise}
        */
-      createProduct: function(params) {
+      createProduct: function(organisationId, params) {
         this.$.createProduct.url = this._url('product/library/products');
         this.$.createProduct.method = "POST";
         this.$.createProduct.contentType = "application/json";
