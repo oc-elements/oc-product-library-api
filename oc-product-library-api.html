@@ -25,6 +25,7 @@ Element for consuming the Ordercloud Product Library API
     <iron-ajax id="addUnlockOptionSet"></iron-ajax>
     <iron-ajax id="removeUnlockOptionSet"></iron-ajax>
     <iron-ajax id="copyOptionSet"></iron-ajax>
+    <iron-ajax id="createProduct"></iron-ajax>
   </template>
 
   <script>
@@ -157,7 +158,19 @@ Element for consuming the Ordercloud Product Library API
         return this._generateRequest(this.$.copyOptionSet);
       },
 
-
+      /**
+       * Create a new product
+       *
+       * @param params (see docs.ordercloud.com POST /product/library/options)
+       * @return {Promise}
+       */
+      createProduct: function(params) {
+        this.$.createProduct.url = this._url('product/library/products');
+        this.$.createProduct.method = "POST";
+        this.$.createProduct.contentType = "application/json";
+        this.$.createProduct.body = params;
+        return this._generateRequest(this.$.createProduct);
+      },
 
 
 
