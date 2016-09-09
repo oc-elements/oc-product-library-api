@@ -10,250 +10,281 @@ Element for consuming the Ordercloud Product Library API
 -->
 
 <dom-module id="oc-product-library-api">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <iron-ajax id="getProductOptionSets"></iron-ajax>
-    <iron-ajax id="getProducts"></iron-ajax>
-    <iron-ajax id="getProduct"></iron-ajax>
-    <iron-ajax id="createOptionSet"></iron-ajax>
-    <iron-ajax id="createOption"></iron-ajax>
-    <iron-ajax id="getProductOptions"></iron-ajax>
-    <iron-ajax id="deleteOption"></iron-ajax>
-    <iron-ajax id="deleteProduct"></iron-ajax>
-    <iron-ajax id="getProductOption"></iron-ajax>
-    <iron-ajax id="addUnlockOptionSet"></iron-ajax>
-    <iron-ajax id="removeUnlockOptionSet"></iron-ajax>
-    <iron-ajax id="copyOptionSet"></iron-ajax>
-    <iron-ajax id="createProduct"></iron-ajax>
-    <iron-ajax id="updateProduct"></iron-ajax>
-    <iron-ajax id="addProductOptionSet"></iron-ajax>
-    <iron-ajax id="removeProductOptionSet"></iron-ajax>
-  </template>
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <iron-ajax id="getProductOptionSets"></iron-ajax>
+        <iron-ajax id="getProductExtraSets"></iron-ajax>
+        <iron-ajax id="getProducts"></iron-ajax>
+        <iron-ajax id="getProduct"></iron-ajax>
+        <iron-ajax id="createOptionSet"></iron-ajax>
+        <iron-ajax id="createOption"></iron-ajax>
+        <iron-ajax id="getProductOptions"></iron-ajax>
+        <iron-ajax id="deleteOption"></iron-ajax>
+        <iron-ajax id="deleteProduct"></iron-ajax>
+        <iron-ajax id="getProductOption"></iron-ajax>
+        <iron-ajax id="addUnlockOptionSet"></iron-ajax>
+        <iron-ajax id="removeUnlockOptionSet"></iron-ajax>
+        <iron-ajax id="copyOptionSet"></iron-ajax>
+        <iron-ajax id="createProduct"></iron-ajax>
+        <iron-ajax id="updateProduct"></iron-ajax>
+        <iron-ajax id="addProductOptionSet"></iron-ajax>
+        <iron-ajax id="removeProductOptionSet"></iron-ajax>
+        <iron-ajax id="addProductExtraSet"></iron-ajax>
+        <iron-ajax id="removeProductExtraSet"></iron-ajax>
+    </template>
 
-  <script>
-    Polymer({
+    <script>
+        Polymer({
 
-      is: 'oc-product-library-api',
-      behaviors: [OC.Behaviours.ApiProvider],
+            is: 'oc-product-library-api',
+            behaviors: [OC.Behaviours.ApiProvider],
 
-      /**
-       *
-       * @param params (see docs.ordercloud.com POST /productlibraryoptions/createLibraryOptionSet)
-       * @return {Promise}
-       */
-      createOptionSet: function(params) {
-        this.$.createOptionSet.url = this._url('/product/library/options/set');
-        this.$.createOptionSet.method = "POST";
-        this.$.createOptionSet.contentType = "application/json";
-        this.$.createOptionSet.body = params;
-        return this._generateRequest(this.$.createOptionSet);
-      },
+            /**
+             *
+             * @param params (see docs.ordercloud.com POST /productlibraryoptions/createLibraryOptionSet)
+             * @return {Promise}
+             */
+            createOptionSet: function(params) {
+                this.$.createOptionSet.url = this._url('/product/library/options/set');
+                this.$.createOptionSet.method = "POST";
+                this.$.createOptionSet.contentType = "application/json";
+                this.$.createOptionSet.body = params;
+                return this._generateRequest(this.$.createOptionSet);
+            },
 
-      /**
-       *
-       * @param params (see docs.ordercloud.com POST /product/library/options)
-       * @return {Promise}
-       */
-      createOption: function(params) {
-        this.$.createOption.url = this._url('/product/library/options');
-        this.$.createOption.method = "POST";
-        this.$.createOption.contentType = "application/json";
-        this.$.createOption.body = params;
-        return this._generateRequest(this.$.createOption);
-      },
+            /**
+             *
+             * @param params (see docs.ordercloud.com POST /product/library/options)
+             * @return {Promise}
+             */
+            createOption: function(params) {
+                this.$.createOption.url = this._url('/product/library/options');
+                this.$.createOption.method = "POST";
+                this.$.createOption.contentType = "application/json";
+                this.$.createOption.body = params;
+                return this._generateRequest(this.$.createOption);
+            },
 
-      /**
-       * Return list of option sets from the product library linked to an organisation
-       *
-       * @return {Promise}
-       */
-      getProductOptionSets: function(page, pageSize) {
-        this.$.getProductOptionSets.url = this._url('/product/library/options/set?page=' + page + '&pagesize=' + pageSize);
-        return this._generateRequest(this.$.getProductOptionSets);
-      },
-
-      /**
-       * Return list of option sets from the product library linked to an organisation
-       *
-       * @return {Promise}
-       */
-      getProducts: function(page, pageSize) {
-        this.$.getProducts.url = this._url('/product/library/products?page=' + page + '&pagesize=' + pageSize);
-        return this._generateRequest(this.$.getProducts);
-      },
-
-      /**
-       * Return single product from the product library linked to an organisation
-       *
-       * @param productId Number
-       * @return {Promise}
-       */
-
-      getProduct: function(productId) {
-        this.$.getProduct.url = this._url('product/library/products/'+productId);
-        return this._generateRequest(this.$.getProduct);
-      },
-
-      /**
-       * Return list of options from the product library linked to an organisation
-       *
-       * @return {Promise}
-       */
-      getProductOptions: function(optionSetId) {
-        this.$.getProductOptions.url = this._url('/product/library/options/set/'+optionSetId);
-        return this._generateRequest(this.$.getProductOptions);
-      },
-
-      /**
-       * Return a option from the product library linked to an organisation
-       *
-       * @return {Promise}
-       */
-      getProductOption: function(optionId) {
-        this.$.getProductOption.url = this._url('/product/library/options/'+optionId);
-        return this._generateRequest(this.$.getProductOption);
-      },
-
-      /**
-       * Update an option
-       * @param optionId Number
-       * @param {{ name: String, description: String, price: Number, setId: Number, itemsPluFlatMappingEnabled: false }} option
-       * @return {Promise}
-       */
-      updateOption: function(optionId, option) {
-        this.$.updateOption.url = this._url('/product/library/options/'+optionId);
-        this.$.updateOption.method = "PUT";
-        this.$.updateOption.contentType = "application/json";
-        this.$.updateOption.body = option;
-        return this._generateRequest(this.$.updateOption);
-      },
-
-      /**
-       * Return list of options from the product library linked to an organisation
-       *
-       * @param params {optionId : string} optionId
-       * @return {Promise}
-       */
-      deleteOption: function(optionId) {
-        this.$.deleteOption.url = this._url('/product/library/options/'+optionId);
-        this.$.deleteOption.method = "DELETE";
-        return this._generateRequest(this.$.deleteOption);
-      },
-
-      /**
-       * Delete library product
-       *
-       * @param params {id : string} id
-       * @return {Promise}
-       */
-      deleteProduct: function(id) {
-        this.$.deleteProduct.url = this._url('product/library/products/' + id);
-        this.$.deleteProduct.method = "DELETE";
-        return this._generateRequest(this.$.deleteProduct);
-      },
-
-      /**
-       * Add unlock option set for option
-       *
-       * @param optionId Number
-       * @param optionSetId Number
-       * @return {Promise}
-       */
-      addUnlockOptionSet: function(optionId, optionSetId) {
-        this.$.addUnlockOptionSet.url = this._url('/product/library/options/'+optionId+'/unlock/options/set/'+optionSetId);
-        this.$.addUnlockOptionSet.method = "PUT";
-        this.$.addUnlockOptionSet.contentType = "application/json";
-        return this._generateRequest(this.$.addUnlockOptionSet);
-      },
-
-      /**
-       * Remove unlock option set for option
-       *
-       * @param optionId Number
-       * @param optionSetId Number
-       * @return {Promise}
-       */
-      removeUnlockOptionSet: function(optionId, optionSetId) {
-        this.$.removeUnlockOptionSet.url = this._url('/product/library/options/'+optionId+'/unlock/options/set/'+optionSetId);
-        this.$.removeUnlockOptionSet.method = "DELETE";
-        this.$.removeUnlockOptionSet.contentType = "application/json";
-        return this._generateRequest(this.$.removeUnlockOptionSet);
-      },
-
-      /**
-       * Add unlock option set for option
-       *
-       * @param optionId Number
-       * @param optionSetId Number
-       * @return {Promise}
-       */
-      copyOptionSet: function(optionSetId, newOptionSetName) {
-        this.$.copyOptionSet.url = this._url('/product/library/options/set/'+optionSetId+'/copy/'+newOptionSetName);
-        this.$.copyOptionSet.method = "PUT";
-        this.$.copyOptionSet.contentType = "application/json";
-        return this._generateRequest(this.$.copyOptionSet);
-      },
-
-      /**
-       * Create a new product
-       *
-       * @param params (see docs.ordercloud.com POST /product/library/products)
-       * @return {Promise}
-       */
-      createProduct: function(organisationId, params) {
-        this.$.createProduct.url = this._url('product/library/products');
-        this.$.createProduct.method = "POST";
-        this.$.createProduct.contentType = "application/json";
-        this.$.createProduct.body = params;
-        return this._generateRequest(this.$.createProduct);
-      },
-
-      /**
-       * Update a new product
-       *
-       * @param params (see docs.ordercloud.com POST /product/library/products)
-       * @return {Promise}
-       */
-      updateProduct: function(productId, params) {
-        this.$.updateProduct.url = this._url('/product/library/products/'+ productId);
-        this.$.updateProduct.method = "PUT";
-        this.$.updateProduct.contentType = "application/json";
-        this.$.updateProduct.body = params;
-        return this._generateRequest(this.$.updateProduct);
-      },
-
-      /**
-       * Add a option set to a product
-       * @param productId Number
-       * @param optionSetId Number
-       * @return {Promise}
-       */
-      addProductOptionSet: function(productId, optionSetId) {
-        this.$.addProductOptionSet.url = this._url('/product/library/products/'+productId+'/options/set/'+optionSetId);
-        this.$.addProductOptionSet.method = "PUT";
-        this.$.addProductOptionSet.contentType = "application/json";
-        return this._generateRequest(this.$.addProductOptionSet);
-      },
-
-      /**
-       * Remove a option set from product
-       * @param productId Number
-       * @param optionSetId Number
-       * @return {Promise}
-       */
-      removeProductOptionSet: function(productId, optionSetId) {
-        this.$.removeProductOptionSet.url = this._url('/product/library/products/'+productId+'/options/set/'+optionSetId);
-        this.$.removeProductOptionSet.method = "DELETE";
-        this.$.removeProductOptionSet.contentType = "application/json";
-        return this._generateRequest(this.$.removeProductOptionSet);
-      },
+            /**
+             * Return list of option sets from the product library linked to an organisation
+             *
+             * @return {Promise}
+             */
+            getProductOptionSets: function(page, pageSize) {
+                this.$.getProductOptionSets.url = this._url('/product/library/options/set?page=' + page + '&pagesize=' + pageSize);
+                return this._generateRequest(this.$.getProductOptionSets);
+            },
 
 
 
-    });
-  </script>
+            /**
+             * Return list of option sets from the product library linked to an organisation
+             *
+             * @return {Promise}
+             */
+            getProducts: function(page, pageSize) {
+                this.$.getProducts.url = this._url('/product/library/products?page=' + page + '&pagesize=' + pageSize);
+                return this._generateRequest(this.$.getProducts);
+            },
+
+            /**
+             * Return single product from the product library linked to an organisation
+             *
+             * @param productId Number
+             * @return {Promise}
+             */
+
+            getProduct: function(productId) {
+                this.$.getProduct.url = this._url('product/library/products/'+productId);
+                return this._generateRequest(this.$.getProduct);
+            },
+
+            /**
+             * Return list of options from the product library linked to an organisation
+             *
+             * @return {Promise}
+             */
+            getProductOptions: function(optionSetId) {
+                this.$.getProductOptions.url = this._url('/product/library/options/set/'+optionSetId);
+                return this._generateRequest(this.$.getProductOptions);
+            },
+
+            /**
+             * Return a option from the product library linked to an organisation
+             *
+             * @return {Promise}
+             */
+            getProductOption: function(optionId) {
+                this.$.getProductOption.url = this._url('/product/library/options/'+optionId);
+                return this._generateRequest(this.$.getProductOption);
+            },
+
+            /**
+             * Update an option
+             * @param optionId Number
+             * @param {{ name: String, description: String, price: Number, setId: Number, itemsPluFlatMappingEnabled: false }} option
+             * @return {Promise}
+             */
+            updateOption: function(optionId, option) {
+                this.$.updateOption.url = this._url('/product/library/options/'+optionId);
+                this.$.updateOption.method = "PUT";
+                this.$.updateOption.contentType = "application/json";
+                this.$.updateOption.body = option;
+                return this._generateRequest(this.$.updateOption);
+            },
+
+            /**
+             * Return list of options from the product library linked to an organisation
+             *
+             * @param params {optionId : string} optionId
+             * @return {Promise}
+             */
+            deleteOption: function(optionId) {
+                this.$.deleteOption.url = this._url('/product/library/options/'+optionId);
+                this.$.deleteOption.method = "DELETE";
+                return this._generateRequest(this.$.deleteOption);
+            },
+
+            /**
+             * Delete library product
+             *
+             * @param params {id : string} id
+             * @return {Promise}
+             */
+            deleteProduct: function(id) {
+                this.$.deleteProduct.url = this._url('product/library/products/' + id);
+                this.$.deleteProduct.method = "DELETE";
+                return this._generateRequest(this.$.deleteProduct);
+            },
+
+            /**
+             * Add unlock option set for option
+             *
+             * @param optionId Number
+             * @param optionSetId Number
+             * @return {Promise}
+             */
+            addUnlockOptionSet: function(optionId, optionSetId) {
+                this.$.addUnlockOptionSet.url = this._url('/product/library/options/'+optionId+'/unlock/options/set/'+optionSetId);
+                this.$.addUnlockOptionSet.method = "PUT";
+                this.$.addUnlockOptionSet.contentType = "application/json";
+                return this._generateRequest(this.$.addUnlockOptionSet);
+            },
+
+            /**
+             * Remove unlock option set for option
+             *
+             * @param optionId Number
+             * @param optionSetId Number
+             * @return {Promise}
+             */
+            removeUnlockOptionSet: function(optionId, optionSetId) {
+                this.$.removeUnlockOptionSet.url = this._url('/product/library/options/'+optionId+'/unlock/options/set/'+optionSetId);
+                this.$.removeUnlockOptionSet.method = "DELETE";
+                this.$.removeUnlockOptionSet.contentType = "application/json";
+                return this._generateRequest(this.$.removeUnlockOptionSet);
+            },
+
+            /**
+             * Add unlock option set for option
+             *
+             * @param optionId Number
+             * @param optionSetId Number
+             * @return {Promise}
+             */
+            copyOptionSet: function(optionSetId, newOptionSetName) {
+                this.$.copyOptionSet.url = this._url('/product/library/options/set/'+optionSetId+'/copy/'+newOptionSetName);
+                this.$.copyOptionSet.method = "PUT";
+                this.$.copyOptionSet.contentType = "application/json";
+                return this._generateRequest(this.$.copyOptionSet);
+            },
+
+            /**
+             * Create a new product
+             *
+             * @param params (see docs.ordercloud.com POST /product/library/products)
+             * @return {Promise}
+             */
+            createProduct: function(organisationId, params) {
+                this.$.createProduct.url = this._url('product/library/products');
+                this.$.createProduct.method = "POST";
+                this.$.createProduct.contentType = "application/json";
+                this.$.createProduct.body = params;
+                return this._generateRequest(this.$.createProduct);
+            },
+
+            /**
+             * Update a new product
+             *
+             * @param params (see docs.ordercloud.com POST /product/library/products)
+             * @return {Promise}
+             */
+            updateProduct: function(productId, params) {
+                this.$.updateProduct.url = this._url('/product/library/products/'+ productId);
+                this.$.updateProduct.method = "PUT";
+                this.$.updateProduct.contentType = "application/json";
+                this.$.updateProduct.body = params;
+                return this._generateRequest(this.$.updateProduct);
+            },
+
+            /**
+             * Add a option set to a product
+             * @param productId Number
+             * @param optionSetId Number
+             * @return {Promise}
+             */
+            addProductOptionSet: function(productId, optionSetId) {
+                this.$.addProductOptionSet.url = this._url('/product/library/products/'+productId+'/options/set/'+optionSetId);
+                this.$.addProductOptionSet.method = "PUT";
+                this.$.addProductOptionSet.contentType = "application/json";
+                return this._generateRequest(this.$.addProductOptionSet);
+            },
+
+            /**
+             * Remove a option set from product
+             * @param productId Number
+             * @param optionSetId Number
+             * @return {Promise}
+             */
+            removeProductOptionSet: function(productId, optionSetId) {
+                this.$.removeProductOptionSet.url = this._url('/product/library/products/'+productId+'/options/set/'+optionSetId);
+                this.$.removeProductOptionSet.method = "DELETE";
+                this.$.removeProductOptionSet.contentType = "application/json";
+                return this._generateRequest(this.$.removeProductOptionSet);
+            },
+
+            /**
+             * Add a extra set to a product
+             * @param productId Number
+             * @param extraSetId Number
+             * @return {Promise}
+             */
+            addProductExtraSet: function(productId, extraSetId) {
+                this.$.addProductExtraSet.url = this._url('/product/library/products/'+productId+'/extras/set/'+extraSetId);
+                this.$.addProductExtraSet.method = "PUT";
+                this.$.addProductExtraSet.contentType = "application/json";
+                return this._generateRequest(this.$.addProductExtraSet);
+            },
+
+            /**
+             * Remove a extra set from product
+             * @param productId Number
+             * @param extraSetId Number
+             * @return {Promise}
+             */
+            removeProductExtraSet: function(productId, extraSetId) {
+                this.$.removeProductExtraSet.url = this._url('/product/library/products/'+productId+'/extras/set/'+extraSetId);
+                this.$.removeProductExtraSet.method = "DELETE";
+                this.$.removeProductExtraSet.contentType = "application/json";
+                return this._generateRequest(this.$.removeProductExtraSet);
+            },
+
+
+
+        });
+    </script>
 </dom-module>
