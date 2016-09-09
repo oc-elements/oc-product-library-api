@@ -35,6 +35,8 @@ Element for consuming the Ordercloud Product Library API
         <iron-ajax id="removeProductOptionSet"></iron-ajax>
         <iron-ajax id="addProductExtraSet"></iron-ajax>
         <iron-ajax id="removeProductExtraSet"></iron-ajax>
+        <iron-ajax id="getAttributes"></iron-ajax>
+        <iron-ajax id="updateProductAttributes"></iron-ajax>
     </template>
 
     <script>
@@ -281,6 +283,32 @@ Element for consuming the Ordercloud Product Library API
                 this.$.removeProductExtraSet.method = "DELETE";
                 this.$.removeProductExtraSet.contentType = "application/json";
                 return this._generateRequest(this.$.removeProductExtraSet);
+            },
+
+            /**
+             * Return all product attributes
+             *
+             * @param showDisabled Boolean
+             * @return {Promise}
+             */
+
+            getAttributes: function(page, pageSize) {
+                this.$.getAttributes.url = this._url('product/library/attributes?page=' + page + '&pagesize=' + pageSize);
+                return this._generateRequest(this.$.getAttributes);
+            },
+
+            /**
+             * Update product attribute
+             * @param productId Number
+             * @param params [{ name: String. value: String }] Array
+             * @return {Promise}
+             */
+            updateProductAttributes: function(productId, params) {
+                this.$.updateProductAttributes.url = this._url('/product/library/products/'+productId+'/attribute');
+                this.$.updateProductAttributes.method = "PUT";
+                this.$.updateProductAttributes.body = params;
+                this.$.updateProductAttributes.contentType = "application/json";
+                return this._generateRequest(this.$.updateProductAttributes);
             },
 
 
