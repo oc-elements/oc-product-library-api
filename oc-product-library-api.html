@@ -17,10 +17,12 @@ Element for consuming the Ordercloud Product Library API
       }
     </style>
     <iron-ajax id="getProductOptionSets"></iron-ajax>
+    <iron-ajax id="getProducts"></iron-ajax>
     <iron-ajax id="createOptionSet"></iron-ajax>
     <iron-ajax id="createOption"></iron-ajax>
     <iron-ajax id="getProductOptions"></iron-ajax>
     <iron-ajax id="deleteOption"></iron-ajax>
+    <iron-ajax id="deleteProduct"></iron-ajax>
     <iron-ajax id="getProductOption"></iron-ajax>
     <iron-ajax id="addUnlockOptionSet"></iron-ajax>
     <iron-ajax id="removeUnlockOptionSet"></iron-ajax>
@@ -71,6 +73,16 @@ Element for consuming the Ordercloud Product Library API
       },
 
       /**
+       * Return list of option sets from the product library linked to an organisation
+       *
+       * @return {Promise}
+       */
+      getProducts: function(page, pageSize) {
+        this.$.getProducts.url = this._url('/product/library/products?page=' + page + '&pagesize=' + pageSize);
+        return this._generateRequest(this.$.getProducts);
+      },
+
+      /**
        * Return list of options from the product library linked to an organisation
        *
        * @return {Promise}
@@ -114,6 +126,18 @@ Element for consuming the Ordercloud Product Library API
         this.$.deleteOption.url = this._url('/product/library/options/'+optionId);
         this.$.deleteOption.method = "DELETE";
         return this._generateRequest(this.$.deleteOption);
+      },
+
+      /**
+       * Delete library product
+       *
+       * @param params {id : string} id
+       * @return {Promise}
+       */
+      deleteProduct: function(id) {
+        this.$.deleteProduct.url = this._url('product/library/products/' + id);
+        this.$.deleteProduct.method = "DELETE";
+        return this._generateRequest(this.$.deleteProduct);
       },
 
       /**
