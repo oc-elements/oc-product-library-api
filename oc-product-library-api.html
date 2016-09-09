@@ -18,6 +18,7 @@ Element for consuming the Ordercloud Product Library API
     </style>
     <iron-ajax id="getProductOptionSets"></iron-ajax>
     <iron-ajax id="getProducts"></iron-ajax>
+    <iron-ajax id="getProduct"></iron-ajax>
     <iron-ajax id="createOptionSet"></iron-ajax>
     <iron-ajax id="createOption"></iron-ajax>
     <iron-ajax id="getProductOptions"></iron-ajax>
@@ -28,6 +29,9 @@ Element for consuming the Ordercloud Product Library API
     <iron-ajax id="removeUnlockOptionSet"></iron-ajax>
     <iron-ajax id="copyOptionSet"></iron-ajax>
     <iron-ajax id="createProduct"></iron-ajax>
+    <iron-ajax id="updateProduct"></iron-ajax>
+    <iron-ajax id="addProductOptionSet"></iron-ajax>
+    <iron-ajax id="removeProductOptionSet"></iron-ajax>
   </template>
 
   <script>
@@ -80,6 +84,18 @@ Element for consuming the Ordercloud Product Library API
       getProducts: function(page, pageSize) {
         this.$.getProducts.url = this._url('/product/library/products?page=' + page + '&pagesize=' + pageSize);
         return this._generateRequest(this.$.getProducts);
+      },
+
+      /**
+       * Return single product from the product library linked to an organisation
+       *
+       * @param productId Number
+       * @return {Promise}
+       */
+
+      getProduct: function(productId) {
+        this.$.getProduct.url = this._url('product/library/products/'+productId);
+        return this._generateRequest(this.$.getProduct);
       },
 
       /**
@@ -194,6 +210,46 @@ Element for consuming the Ordercloud Product Library API
         this.$.createProduct.contentType = "application/json";
         this.$.createProduct.body = params;
         return this._generateRequest(this.$.createProduct);
+      },
+
+      /**
+       * Update a new product
+       *
+       * @param params (see docs.ordercloud.com POST /product/library/products)
+       * @return {Promise}
+       */
+      updateProduct: function(productId, params) {
+        this.$.updateProduct.url = this._url('/product/library/products/'+ productId);
+        this.$.updateProduct.method = "PUT";
+        this.$.updateProduct.contentType = "application/json";
+        this.$.updateProduct.body = params;
+        return this._generateRequest(this.$.updateProduct);
+      },
+
+      /**
+       * Add a option set to a product
+       * @param productId Number
+       * @param optionSetId Number
+       * @return {Promise}
+       */
+      addProductOptionSet: function(productId, optionSetId) {
+        this.$.addProductOptionSet.url = this._url('/product/library/products/'+productId+'/options/set/'+optionSetId);
+        this.$.addProductOptionSet.method = "PUT";
+        this.$.addProductOptionSet.contentType = "application/json";
+        return this._generateRequest(this.$.addProductOptionSet);
+      },
+
+      /**
+       * Remove a option set from product
+       * @param productId Number
+       * @param optionSetId Number
+       * @return {Promise}
+       */
+      removeProductOptionSet: function(productId, optionSetId) {
+        this.$.removeProductOptionSet.url = this._url('/product/library/products/'+productId+'/options/set/'+optionSetId);
+        this.$.removeProductOptionSet.method = "DELETE";
+        this.$.removeProductOptionSet.contentType = "application/json";
+        return this._generateRequest(this.$.removeProductOptionSet);
       },
 
 
