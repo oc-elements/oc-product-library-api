@@ -311,6 +311,41 @@ Element for consuming the Ordercloud Product Library API
                 return this._generateRequest(this.$.updateProductAttributes);
             },
 
+            /**
+             * Return all images for a product
+             * @param productId Number
+             * @return {Promise}
+             */
+            getProductImages: function(productId) {
+                this.$.getProductImages.url = this._url('product/library/products/'+productId+'/images');
+                return this._generateRequest(this.$.getProductImages);
+            },
+
+            /**
+             * Delete product image
+             * @param productId Number
+             * @param imageName path
+             * @return {Promise}
+             */
+            deleteProductImage: function(productId, imageName) {
+                this.$.deleteProductImage.url = this._url('/product/library/products/'+productId+'/image/'+imageName);
+                this.$.deleteProductImage.method = "DELETE";
+                return this._generateRequest(this.$.deleteProductImage);
+            },
+
+            /**
+             * Set Image as default
+             * @param productId Number
+             * @param imageName path
+             * @return {Promise}
+             */
+            setDefaultImage: function(productId, imageName) {
+                this.$.setDefaultImage.url = this._url('product/library/products/'+productId+'/image/'+imageName+'/default');
+                this.$.setDefaultImage.method = "PUT";
+                this.$.setDefaultImage.contentType = "application/json";
+                return this._generateRequest(this.$.setDefaultImage);
+            },
+
 
 
         });
